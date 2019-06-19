@@ -1,18 +1,17 @@
 // Flutter imports
-import 'package:autoroom/devices/room_parameters.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 // Custom Utilities imports
-import 'package:autoroom/appBar.dart';
-import 'package:autoroom/bottomNavBar.dart';
-import 'package:autoroom/theme.dart';
+import 'package:Autoroom/appBar.dart';
+import 'package:Autoroom/bottomNavBar.dart';
+import 'package:Autoroom/theme.dart';
 // Devices to Control
-import 'package:autoroom/devices/fan.dart';
-import 'package:autoroom/devices/lights.dart';
-import 'package:autoroom/devices/neopixels.dart';
-import 'package:autoroom/devices/room_parameters.dart';
-import 'package:autoroom/devices/info.dart';
+import 'package:Autoroom/devices/fan.dart';
+import 'package:Autoroom/devices/lights.dart';
+import 'package:Autoroom/devices/neopixels.dart';
+import 'package:Autoroom/devices/room_parameters.dart';
+import 'package:Autoroom/devices/info.dart';
 
 void main() {
   runApp(
@@ -80,7 +79,7 @@ class AutoRoomState extends State<AutoRoom> {
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
-              title: new Text('home'),
+              title: new Text('Home'),
             ),
 
             BottomNavigationBarItem(

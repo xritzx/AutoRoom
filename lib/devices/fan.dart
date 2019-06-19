@@ -13,29 +13,19 @@ class Fan extends StatefulWidget {
 
 class _FanState extends State<Fan> {
   
-  int state=0;
+  int state;
   
   String url = "https://autoroom-948ae.firebaseio.com/autoroom/fan.json";
 
   @override
-  Widget build(BuildContext context) {
-    return new Container(
-      child: Column(
-        children: <Widget>[
-          Container(
-            width: 500,
-            height: 500,
-            child: GestureDetector(
-              onTap: _change,
-              child: FlareActor(
-                'assets/animations/switch.flr',
-                animation: state!=0?'On':'Off',
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+  void initState() {
+    super.initState();
+    _fetchState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   void _change(){
@@ -57,6 +47,45 @@ class _FanState extends State<Fan> {
         };
         await http.put(url, body:jsonEncode((state+2)%2));
         print(jsonEncode(data).toString());
+  }
+
+ Future<void> _fetchState() async{
+   await http.get(url).then((res){
+     setState(() {
+      state = json.decode(res.body); 
+     });
+   });
+ }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: new Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Center(
+              child: Container(
+                child: Text("Toggle",style: TextStyle(fontSize: 30),),
+              ),
+            ),
+            Center(
+              child: Container(
+                width: 294,
+                height: 110,
+                child: GestureDetector(
+                  onTap: _change,
+                  child: FlareActor( 
+                    'assets/animations/slide.flr', // 294 X 110
+                    animation: state!=0?'On':'Off',
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
 }
