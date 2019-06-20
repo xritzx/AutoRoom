@@ -55,12 +55,25 @@ class AutoRoomState extends State<AutoRoom> {
     "Room Parameters",
   ];
 
+  void _shiftPage(DragEndDetails  details){
+    if(details.primaryVelocity == 0) return;
+
+    if (details.primaryVelocity.compareTo(0) == -1)
+      print('dragged from left');
+    else 
+      print('dragged from right');
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
 
         appBar: CustomAppBar(_titles[_selectedIndex]),
-        body: _children[_selectedIndex],
+        body: GestureDetector(
+          child: _children[_selectedIndex],
+          onHorizontalDragEnd: (DragEndDetails details) => _shiftPage(details),
+          onTap: ()=>print("helo"),
+        ),
 
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _selectedIndex,

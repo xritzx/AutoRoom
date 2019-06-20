@@ -15,7 +15,7 @@ class _FanState extends State<Fan> {
   
   int state;
   
-  String url = "https://autoroom-948ae.firebaseio.com/autoroom/fan.json";
+  String url = "https://autoroom-948ae.firebaseio.com/fan.json";
 
   @override
   void initState() {

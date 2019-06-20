@@ -5,7 +5,10 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flare_flutter/flare_actor.dart';
+import 'package:firebase_database/firebase_database.dart';
 
+
+final database = FirebaseDatabase.instance.reference();
 
 
 class RoomParam extends StatefulWidget {
@@ -41,23 +44,35 @@ class _RoomParamState extends State<RoomParam> {
     });
   }
 
+  // Future<void> _fetchData() async{
+  //     String url = "https://autoroom-948ae.firebaseio.com/";
+
+  //     http.get(url+"temp.json").then((res){
+  //         setState(() {
+  //           temperature = json.decode(res.body);
+  //           _changeColor(temperature);
+  //         });
+  //       }
+  //     );
+  //     http.get(url+"humidity.json").then((res){
+  //       setState(() {
+  //        humidity = json.decode(res.body);
+  //       });
+  //     });
+  // }
   Future<void> _fetchData() async{
-      String url = "https://autoroom-948ae.firebaseio.com/autoroom/";
-
-      http.get(url+"temp.json").then((res){
-          setState(() {
-            temperature = json.decode(res.body);
-            _changeColor(temperature);
-          });
-        }
-      );
-      http.get(url+"humidity.json").then((res){
-        setState(() {
-         humidity = json.decode(res.body);
-        });
+    database.child("temp").once().then((DataSnapshot snapshot){
+      setState(() {
+       temperature = snapshot.value;
+       _changeColor(temperature);
       });
+    });
+    database.child("humidity").once().then((DataSnapshot snapshot){
+      setState(() {
+        humidity = snapshot.value;
+      });
+    });
   }
-
 
 
   @override
