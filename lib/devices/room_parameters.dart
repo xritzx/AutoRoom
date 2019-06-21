@@ -8,7 +8,6 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 
-final database = FirebaseDatabase.instance.reference();
 
 
 class RoomParam extends StatefulWidget {
@@ -18,109 +17,113 @@ class RoomParam extends StatefulWidget {
 }
 
 class _RoomParamState extends State<RoomParam> {
+  
+  final database = FirebaseDatabase.instance.reference();
   int state;
   int temperature;
   int humidity;
+  StreamSubscription _streamSub;
+
+  Future<StreamSubscription<Event>> getParamStream(void onData(var value)) async{
+    StreamSubscription<Event> subscription = database.child("params").onValue.listen((Event event){
+      var data = event.snapshot.value;
+      print(data.toString());
+      onData(data);
+      
+    });
+    return subscription;
+  }
 
   @override
   void initState() {
     super.initState();
-    _fetchData();
+    getParamStream(_changeParams).then((StreamSubscription s)=>_streamSub = s);
   }
 
   @override
   void dispose() {
     super.dispose();
+    _streamSub.cancel();
   }
-  
+
   void _changeColor(int temp){
     setState(() {
-      if(temp>=28){
-        state = 1;
-      }
-      else if(temp<28){
-        state = 0;
-      }
+      state = (temp<28)?0:1;
     });
+  }
+
+  void _changeParams(var data){
+    int temp = data['temp'];
+    int humid = data['humidity'];
+    setState(() {
+     temperature = temp;
+     humidity = humid;
+    });
+    _changeColor(temp);
   }
 
   // Future<void> _fetchData() async{
-  //     String url = "https://autoroom-948ae.firebaseio.com/";
-
-  //     http.get(url+"temp.json").then((res){
-  //         setState(() {
-  //           temperature = json.decode(res.body);
-  //           _changeColor(temperature);
-  //         });
-  //       }
-  //     );
-  //     http.get(url+"humidity.json").then((res){
-  //       setState(() {
-  //        humidity = json.decode(res.body);
-  //       });
+  //   database.child("temp").once().then((DataSnapshot snapshot){
+  //     setState(() {
+  //      temperature = snapshot.value;
+  //      _changeParams(temp: temperature);
   //     });
+  //   });
+  //   database.child("humidity").once().then((DataSnapshot snapshot){
+  //     setState(() {
+  //       humidity = snapshot.value;
+  //       _changeParams(humid: humidity);
+  //     });
+  //   });
   // }
-  Future<void> _fetchData() async{
-    database.child("temp").once().then((DataSnapshot snapshot){
-      setState(() {
-       temperature = snapshot.value;
-       _changeColor(temperature);
-      });
-    });
-    database.child("humidity").once().then((DataSnapshot snapshot){
-      setState(() {
-        humidity = snapshot.value;
-      });
-    });
-  }
 
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        child: RefreshIndicator(
-          onRefresh: _fetchData,
-          child: new ListView(
-
-            children: <Widget>[
-              Center(
-                child: Container(
-                  height: 384,
-                  width: 172,
-                  child: FlareActor(
-                    'assets/animations/thermometer.flr',
-                    animation: (state!=0)?'red_glow':'blue_glow',
-                  ),
+        child: new Column(
+          children: <Widget>[
+            Center(
+              child: Container(
+                height: 384,
+                width: 172,
+                child: FlareActor(
+                  'assets/animations/thermometer.flr',
+                  animation: (state!=0)?'red_glow':'blue_glow',
                 ),
               ),
+            ),
 
-              Center(
-                child: Container(
-                  padding: EdgeInsets.all(20),
-                  child: Column(
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text("Temperature | ", style: TextStyle(fontSize:30),),
-                          Text(temperature.toString(), style: TextStyle(fontSize:30),),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text("Humidity | ", style: TextStyle(fontSize:30),),
-                          Text(humidity.toString()+"%", style: TextStyle(fontSize:30),),
-                        ],
-                      ),
-                    ],
-                  ),
+            Center(
+              child: Container(
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  children: <Widget>[
+                    
+                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        Text("Temperature | ", style: TextStyle(fontSize:30),),
+                        Text(temperature.toString() , style: TextStyle(fontSize:30),),
+                      ],
+                    ),
+                  
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        Text("Humidity | ", style: TextStyle(fontSize:30),),
+                        Text(humidity.toString()+"%", style: TextStyle(fontSize:30),),
+                      ],
+                    ),
+                  ],
                 ),
               ),
+            ),
 
-            ],
-          ),
+          ],
         )
       ),
     );
