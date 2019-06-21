@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flare_flutter/flare_actor.dart';
-import 'package:http/http.dart' as http;
+import 'package:firebase_database/firebase_database.dart';
 import 'dart:async';
-import 'dart:convert';
 
 
 class Fan extends StatefulWidget {
@@ -13,10 +12,9 @@ class Fan extends StatefulWidget {
 
 class _FanState extends State<Fan> {
   
+  final database = FirebaseDatabase.instance.reference();
   int state;
   
-  String url = "https://autoroom-948ae.firebaseio.com/fan.json";
-
   @override
   void initState() {
     super.initState();
@@ -30,32 +28,23 @@ class _FanState extends State<Fan> {
 
   void _change(){
     setState(() {
-      if(state==1){
-        state = 0;
-        _updateDB();
-      }
-      else if(state==0){
-        state = 1;
-        _updateDB();
-      }
+      state = (state==0)?1:0;
+      _updateDB();
     });
   }
 
   Future<void> _updateDB() async{
-        Map<String,int> data ={
-          "fan":(state+2)%2,
-        };
-        await http.put(url, body:jsonEncode((state+2)%2));
-        print(jsonEncode(data).toString());
+    database.update({'fan':state});
   }
 
- Future<void> _fetchState() async{
-   await http.get(url).then((res){
-     setState(() {
-      state = json.decode(res.body); 
-     });
-   });
- }
+  Future<void> _fetchState() async{
+    database.child('fan').once().then((DataSnapshot snapshot){
+      setState(() {
+       state = snapshot.value;
+      });
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -64,11 +53,15 @@ class _FanState extends State<Fan> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Center(
-              child: Container(
-                child: Text("Toggle",style: TextStyle(fontSize: 30),),
+            Container(
+              decoration: BoxDecoration(
+                color: state==1?Colors.white:Colors.black,
+                border: Border.all(color: Colors.white),
               ),
+              padding: EdgeInsets.fromLTRB(30, 5, 30, 5),
+              child: Text("TOGGLE", style: TextStyle(fontSize: 25, color: state==1?Colors.black:Colors.white),),
             ),
+            Padding(padding: EdgeInsets.all(30),),
             Center(
               child: Container(
                 width: 294,
