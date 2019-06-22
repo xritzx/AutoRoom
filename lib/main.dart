@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 // Custom Utilities imports
 import 'package:Autoroom/appBar.dart';
-import 'package:Autoroom/bottomNavBar.dart';
 import 'package:Autoroom/theme.dart';
 // Devices to Control
 import 'package:Autoroom/devices/fan.dart';
@@ -14,8 +13,10 @@ import 'package:Autoroom/devices/room_parameters.dart';
 import 'package:Autoroom/devices/info.dart';
 
 void main() {
+
   runApp(
     new MaterialApp(
+      
       home: AutoRoom(),
       routes: <String, WidgetBuilder>{
         '/main': (BuildContext context) => new AutoRoom(),
@@ -39,6 +40,25 @@ class AutoRoomState extends State<AutoRoom> {
 
   int _selectedIndex = 0;
 
+  
+  void _shiftPage(DragEndDetails details){
+    double v = details.velocity.pixelsPerSecond.dx;
+    if (v > 50){
+      setState(() {
+       if(_selectedIndex>0) _selectedIndex--; 
+      });
+      print('dragged from le ft');
+      }
+    if(v < -50){
+      setState(() {
+       if(_selectedIndex<_children.length-1) _selectedIndex++; 
+      });
+      print('dragged from rig ht');
+    }
+    else return;
+  }
+
+
   final List<Widget> _children = [
     Info(),
     Fan(),
@@ -55,72 +75,61 @@ class AutoRoomState extends State<AutoRoom> {
     "Room Parameters",
   ];
 
-  void _shiftPage(DragEndDetails  details){
-    if(details.primaryVelocity == 0) return;
-
-    if (details.primaryVelocity.compareTo(0) == -1)
-      print('dragged from left');
-    else 
-      print('dragged from right');
-  }
-
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return  GestureDetector(
+        onHorizontalDragEnd: _shiftPage,
+        child: Scaffold(
+          appBar: CustomAppBar(_titles[_selectedIndex]),
+          body: _children[_selectedIndex],
 
-        appBar: CustomAppBar(_titles[_selectedIndex]),
-        body: GestureDetector(
-          child: _children[_selectedIndex],
-          onHorizontalDragEnd: (DragEndDetails details) => _shiftPage(details),
-          onTap: ()=>print("helo"),
-        ),
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: _selectedIndex,
 
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _selectedIndex,
+            onTap: (index){
+              setState(() {
+                _selectedIndex = index;
+              });
+            },
+            
+            backgroundColor: Colors.black,
+            type: BottomNavigationBarType.shifting,
+            selectedItemColor: Theme.of(context).accentColor,
+            unselectedItemColor: Colors.white,
 
-          onTap: (index){
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
-          
-          backgroundColor: Colors.black,
-          type: BottomNavigationBarType.shifting,
-          selectedItemColor: Theme.of(context).accentColor,
-          unselectedItemColor: Colors.white,
+            items: [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                title: new Text('Home'),
+              ),
 
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              title: new Text('Home'),
-            ),
+              BottomNavigationBarItem(
+                icon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/fan.png',color: Colors.white))),
+                activeIcon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/fan.png',color: Theme.of(context).accentColor))),
+                title: Text('Fan'),
+              ),
 
-            BottomNavigationBarItem(
-              icon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/fan.png',color: Colors.white))),
-              activeIcon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/fan.png',color: Theme.of(context).accentColor))),
-              title: Text('Fan'),
-            ),
+              BottomNavigationBarItem(
+                icon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/led.png',color: Colors.white))),
+                activeIcon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/led.png',color: Theme.of(context).accentColor))),
+                title: Text('Lights'),
+              ),
 
-            BottomNavigationBarItem(
-              icon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/led.png',color: Colors.white))),
-              activeIcon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/led.png',color: Theme.of(context).accentColor))),
-              title: Text('Lights'),
-            ),
+              BottomNavigationBarItem(
+                icon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/neopixels.png',color: Colors.white))),
+                activeIcon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/neopixels.png',color: Theme.of(context).accentColor))),
+                title: Text('NeoPixels'),
+              ),
 
-            BottomNavigationBarItem(
-              icon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/neopixels.png',color: Colors.white))),
-              activeIcon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/neopixels.png',color: Theme.of(context).accentColor))),
-              title: Text('NeoPixels'),
-            ),
+              BottomNavigationBarItem(
+                icon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/thermometer.png',color: Colors.white))),
+                activeIcon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/thermometer.png',color: Theme.of(context).accentColor))),
+                title: new Text('Stats'),
+              ),
 
-            BottomNavigationBarItem(
-              icon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/thermometer.png',color: Colors.white))),
-              activeIcon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/thermometer.png',color: Theme.of(context).accentColor))),
-              title: new Text('Stats'),
-            ),
-
-          ],
-      ), 
+            ],
+        ), 
+      ),
     );
   }
 }

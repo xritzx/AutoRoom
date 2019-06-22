@@ -26,9 +26,7 @@ class _RoomParamState extends State<RoomParam> {
   Future<StreamSubscription<Event>> getParamStream(void onData(var value)) async{
     StreamSubscription<Event> subscription = database.child("params").onValue.listen((Event event){
       var data = event.snapshot.value;
-      print(data.toString());
       onData(data);
-      
     });
     return subscription;
   }
@@ -60,21 +58,6 @@ class _RoomParamState extends State<RoomParam> {
     });
     _changeColor(temp);
   }
-
-  // Future<void> _fetchData() async{
-  //   database.child("temp").once().then((DataSnapshot snapshot){
-  //     setState(() {
-  //      temperature = snapshot.value;
-  //      _changeParams(temp: temperature);
-  //     });
-  //   });
-  //   database.child("humidity").once().then((DataSnapshot snapshot){
-  //     setState(() {
-  //       humidity = snapshot.value;
-  //       _changeParams(humid: humidity);
-  //     });
-  //   });
-  // }
 
 
   @override
