@@ -47,13 +47,11 @@ class AutoRoomState extends State<AutoRoom> {
       setState(() {
        if(_selectedIndex>0) _selectedIndex--; 
       });
-      print('dragged from le ft');
-      }
+    }
     if(v < -50){
       setState(() {
        if(_selectedIndex<_children.length-1) _selectedIndex++; 
       });
-      print('dragged from rig ht');
     }
     else return;
   }
