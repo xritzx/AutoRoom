@@ -1,7 +1,5 @@
 // Flutter imports
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:async';
 // Custom Utilities imports
 import 'package:Autoroom/appBar.dart';
 import 'package:Autoroom/theme.dart';
@@ -61,7 +59,7 @@ class AutoRoomState extends State<AutoRoom> {
     Info(),
     Fan(),
     Lights(),
-    Neopixels(),
+    NeoPixels(),
     RoomParam(),
   ];
 
