@@ -41,12 +41,12 @@ class AutoRoomState extends State<AutoRoom> {
   
   void _shiftPage(DragEndDetails details){
     double v = details.velocity.pixelsPerSecond.dx;
-    if (v > 50){
+    if (v > 1000){
       setState(() {
        if(_selectedIndex>0) _selectedIndex--; 
       });
     }
-    if(v < -50){
+    if(v < -1000){
       setState(() {
        if(_selectedIndex<_children.length-1) _selectedIndex++; 
       });
