@@ -9,9 +9,17 @@ import 'package:Autoroom/devices/lights.dart';
 import 'package:Autoroom/devices/neopixels.dart';
 import 'package:Autoroom/devices/room_parameters.dart';
 import 'package:Autoroom/devices/info.dart';
+import 'package:Autoroom/user.dart';
 
-void main() {
 
+List<String> user;
+
+void main() async{
+
+  await getUser().then((List<String> _user){
+    user = _user;
+  });
+  
   runApp(
     new MaterialApp(
       

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:Autoroom/theme.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:Autoroom/main.dart';
 
 
 class NeoPixels extends StatefulWidget {
@@ -12,7 +13,7 @@ class NeoPixels extends StatefulWidget {
 
 class _NeoPixelsState extends State<NeoPixels> {
   
-  final database = FirebaseDatabase.instance.reference();
+  final database = FirebaseDatabase.instance.reference().child(user[0]);
   final npIDController = TextEditingController();
   double hueGlobal = 0;
   double saturationGlobal = 0;
@@ -95,6 +96,13 @@ class _NeoPixelsState extends State<NeoPixels> {
                 width: 150,
                 height: 150,
                 decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color:  HSVColor.fromAHSV(0.5, hueGlobal, saturationGlobal, valueGlobal).toColor(),
+                      blurRadius: valueGlobal*20,
+                      spreadRadius: valueGlobal*20,
+                    ),
+                  ],
                     shape: BoxShape.circle,
                     color: HSVColor.fromAHSV(1, hueGlobal, saturationGlobal, valueGlobal).toColor(),
                   ),

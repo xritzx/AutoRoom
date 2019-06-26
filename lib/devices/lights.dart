@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:Autoroom/theme.dart';
+import 'package:Autoroom/main.dart';
 import 'dart:async';
 
 
@@ -12,7 +13,7 @@ class Lights extends StatefulWidget {
 
 class _LightsState extends State<Lights> {
 
-  final database = FirebaseDatabase.instance.reference();
+  final database = FirebaseDatabase.instance.reference().child(user[0]);
   int _intensity=0;
 
   @override

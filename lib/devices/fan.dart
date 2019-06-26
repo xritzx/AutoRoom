@@ -3,6 +3,7 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'dart:async';
 
+import 'package:Autoroom/main.dart';
 
 class Fan extends StatefulWidget {
   Fan({Key key}) : super(key: key);
@@ -12,7 +13,7 @@ class Fan extends StatefulWidget {
 
 class _FanState extends State<Fan> {
   
-  final database = FirebaseDatabase.instance.reference();
+  final database = FirebaseDatabase.instance.reference().child(user[0]);
   int state;
   
   @override

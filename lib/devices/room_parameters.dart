@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:firebase_database/firebase_database.dart';
 
-
+import 'package:Autoroom/main.dart';
 
 
 class RoomParam extends StatefulWidget {
@@ -17,7 +17,7 @@ class RoomParam extends StatefulWidget {
 
 class _RoomParamState extends State<RoomParam> {
   
-  final database = FirebaseDatabase.instance.reference();
+  final database = FirebaseDatabase.instance.reference().child(user[0]);
   int state;
   int temperature;
   int humidity;
@@ -59,6 +59,20 @@ class _RoomParamState extends State<RoomParam> {
     _changeColor(temp);
   }
 
+  Widget _dataTile(String title, int value, {String unit}){
+      return Container(
+        padding: EdgeInsets.all(10),
+        color: Colors.white,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            Text(title, style: TextStyle(fontSize:20, color: Colors.black),),
+            Text(value.toString()+unit, style: TextStyle(fontSize:30, color: Colors.black),),
+          ],
+        ),
+      );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,26 +94,11 @@ class _RoomParamState extends State<RoomParam> {
             Center(
               child: Container(
                 padding: EdgeInsets.all(20),
-                child: Column(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-                    
-                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
-                        Text("Temperature | ", style: TextStyle(fontSize:30),),
-                        Text(temperature.toString() , style: TextStyle(fontSize:30),),
-                      ],
-                    ),
-                  
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
-                        Text("Humidity | ", style: TextStyle(fontSize:30),),
-                        Text(humidity.toString()+"%", style: TextStyle(fontSize:30),),
-                      ],
-                    ),
+                    _dataTile("Temperature", temperature, unit:'\u00B0'),
+                    _dataTile("Humidity", humidity, unit:'%'),
                   ],
                 ),
               ),
