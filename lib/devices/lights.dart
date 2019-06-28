@@ -47,9 +47,9 @@ class _LightsState extends State<Lights> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Container(
-            color: Colors.white,
+            color: Theme.of(context).unselectedWidgetColor,
             padding: EdgeInsets.fromLTRB(30, 5, 30, 5),
-            child: Text("INTENSITY", style: TextStyle(fontSize: 20, color: Colors.black),),
+            child: Text("INTENSITY", style: TextStyle(fontSize: 20, color: Theme.of(context).primaryColor),),
             ),
           Padding(padding: EdgeInsets.all(30),),
           Container(

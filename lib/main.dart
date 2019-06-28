@@ -1,4 +1,5 @@
 // Flutter imports
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 // Custom Utilities imports
 import 'package:Autoroom/appBar.dart';
@@ -19,18 +20,8 @@ void main() async{
   await getUser().then((List<String> _user){
     user = _user;
   });
-  
-  runApp(
-    new MaterialApp(
-      
-      home: AutoRoom(),
-      routes: <String, WidgetBuilder>{
-        '/main': (BuildContext context) => new AutoRoom(),
-        // '/settings': (BuildContext context) => new Fan(),
-      },
-      theme: darkTheme(),
-    )
-  );
+
+  runApp(new AutoRoom());
 }
 
 
@@ -45,8 +36,8 @@ class AutoRoom extends StatefulWidget {
 class AutoRoomState extends State<AutoRoom> {
 
   int _selectedIndex = 0;
+  bool themeMode = true;
 
-  
   void _shiftPage(DragEndDetails details){
     double v = details.velocity.pixelsPerSecond.dx;
     if (v > 1000){
@@ -81,58 +72,63 @@ class AutoRoomState extends State<AutoRoom> {
 
   @override
   Widget build(BuildContext context) {
-    return  GestureDetector(
-        onHorizontalDragEnd: _shiftPage,
-        child: Scaffold(
-          appBar: CustomAppBar(_titles[_selectedIndex]),
-          body: _children[_selectedIndex],
+    return  MaterialApp(
+        theme: themeMode?lightTheme():darkTheme(),
+        home: GestureDetector(
+          onLongPress: ()=>setState(()=>themeMode=!themeMode),
+          onHorizontalDragEnd: _shiftPage,
+          child: Scaffold(
+            appBar: CustomAppBar(_titles[_selectedIndex]),
+            body: _children[_selectedIndex],
 
-          bottomNavigationBar: BottomNavigationBar(
-            currentIndex: _selectedIndex,
+            bottomNavigationBar: BottomNavigationBar(
+              currentIndex: _selectedIndex,
 
-            onTap: (index){
-              setState(() {
-                _selectedIndex = index;
-              });
-            },
-            
-            backgroundColor: Colors.black,
-            type: BottomNavigationBarType.shifting,
-            selectedItemColor: Theme.of(context).accentColor,
-            unselectedItemColor: Colors.white,
+              onTap: (index){
+                setState(() {
+                  _selectedIndex = index;
+                });
+              },
+              
+              backgroundColor: Colors.transparent,
+              type: BottomNavigationBarType.shifting,
 
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                title: new Text('Home'),
-              ),
+    
 
-              BottomNavigationBarItem(
-                icon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/fan.png',color: Colors.white))),
-                activeIcon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/fan.png',color: Theme.of(context).accentColor))),
-                title: Text('Fan'),
-              ),
+              items: [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home,color: Colors.deepPurple,),
+                  activeIcon: Icon(Icons.home,color: Colors.deepOrangeAccent,),
+                  title: Text('Home',style: TextStyle(color: Colors.deepOrangeAccent),),
+                ),
 
-              BottomNavigationBarItem(
-                icon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/led.png',color: Colors.white))),
-                activeIcon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/led.png',color: Theme.of(context).accentColor))),
-                title: Text('Lights'),
-              ),
+                BottomNavigationBarItem(
+                  icon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/fan.png', color: Color.fromARGB(255,150,150,150)))),
+                  activeIcon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/fan.png',color: Colors.deepOrangeAccent))),
+                  title: Text('Fan',style: TextStyle(color: Colors.deepOrangeAccent),),
+                ),
 
-              BottomNavigationBarItem(
-                icon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/neopixels.png',color: Colors.white))),
-                activeIcon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/neopixels.png',color: Theme.of(context).accentColor))),
-                title: Text('NeoPixels'),
-              ),
+                BottomNavigationBarItem(
+                  icon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/led.png',color: Color.fromARGB(255,150,150,150)))),
+                  activeIcon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/led.png',color: Colors.deepOrangeAccent))),
+                  title: Text('Lights',style: TextStyle(color: Colors.deepOrangeAccent),),
+                ),
 
-              BottomNavigationBarItem(
-                icon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/thermometer.png',color: Colors.white))),
-                activeIcon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/thermometer.png',color: Theme.of(context).accentColor))),
-                title: new Text('Stats'),
-              ),
+                BottomNavigationBarItem(
+                  icon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/neopixels.png',color: Color.fromARGB(255,150,150,150)))),
+                  activeIcon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/neopixels.png',color: Colors.deepOrangeAccent))),
+                  title: Text('NeoPixels',style: TextStyle(color: Colors.deepOrangeAccent),),
+                ),
 
-            ],
-        ), 
+                BottomNavigationBarItem(
+                  icon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/thermometer.png',color: Color.fromARGB(255,150,150,150)))),
+                  activeIcon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/thermometer.png',color: Colors.deepOrangeAccent))),
+                  title: Text('Stats',style: TextStyle(color: Colors.deepOrangeAccent),),
+                ),
+
+              ],
+          ), 
+        ),  
       ),
     );
   }

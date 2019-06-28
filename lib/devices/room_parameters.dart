@@ -61,14 +61,15 @@ class _RoomParamState extends State<RoomParam> {
 
   Widget _dataTile(String title, int value, {String unit}){
       return Container(
+        width: 150,
         padding: EdgeInsets.all(10),
-        color: Colors.white,
+        color: Theme.of(context).unselectedWidgetColor,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
-            Text(title, style: TextStyle(fontSize:20, color: Colors.black),),
-            Text(value.toString()+unit, style: TextStyle(fontSize:30, color: Colors.black),),
+            Text(title, style: TextStyle(fontSize:20, color:Theme.of(context).primaryColor),),
+            Text(value.toString()+unit, style: TextStyle(fontSize:30, color:Theme.of(context).primaryColor),),
           ],
         ),
       );
@@ -79,9 +80,11 @@ class _RoomParamState extends State<RoomParam> {
     return Center(
       child: Container(
         child: new Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Center(
               child: Container(
+                color: Theme.of(context).unselectedWidgetColor.withAlpha(2),
                 height: 384,
                 width: 172,
                 child: FlareActor(

@@ -126,10 +126,10 @@ class _NeoPixelsState extends State<NeoPixels> {
                 Padding(padding: EdgeInsets.all(20),),
                  RaisedButton(
                   onPressed: _updateColorDB,
-                  color: updateState? Color.fromARGB(255, 248, 167, 255): Colors.white,                  
+                  color: updateState? Theme.of(context).accentColor: Theme.of(context).unselectedWidgetColor.withAlpha(200),                  
                   child: Text(
                     updateState?"Updated":"Update "+ledID.toString(),
-                    style: TextStyle(color: Colors.black, fontSize: 15),
+                    style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 15),
                   ),
                 ),
               ],

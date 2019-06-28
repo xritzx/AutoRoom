@@ -14,7 +14,7 @@ class _InfoState extends State<Info> {
   final database = FirebaseDatabase.instance.reference();
   String username="User";
   String token;
-  bool checkPassed = true;
+  bool checkPassed = null;
   List<String> user;
 
   final usernameController = TextEditingController();
@@ -51,11 +51,9 @@ class _InfoState extends State<Info> {
      print(user.toString());
     });
     setUser(user).then((b){
-      setState(() {
-       usernameController.text="Changes Saved";
-      });
+      database.child(globalUser.user[0]).child('token').update({'public':globalUser.user[1]}).then((_)=>_checkToken());
     });
-    database.child(globalUser.user[0]).child('token').update({'public':globalUser.user[1]}).then((_)=>_checkToken());
+
   }
 
   void _checkToken(){
@@ -76,6 +74,8 @@ class _InfoState extends State<Info> {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
+        color: Color.fromARGB(40, 120, 120, 120),
+        padding: EdgeInsets.all(15),
         width: 200,
          child: Column(
            mainAxisAlignment: MainAxisAlignment.center,
@@ -87,6 +87,9 @@ class _InfoState extends State<Info> {
                onChanged: _saveUser,
                onTap: ()=>usernameController.text="",
                textAlign: TextAlign.center,
+               decoration: InputDecoration(
+                hintText: 'Username',
+               ),
              ),
 
              Padding(padding: EdgeInsets.all(10)),
@@ -97,6 +100,9 @@ class _InfoState extends State<Info> {
                obscureText: true,
                onSubmitted: _saveToken,
                textAlign: TextAlign.center,
+               decoration: InputDecoration(
+                hintText: 'Token',
+               ),
              ),
 
              Padding(padding: EdgeInsets.all(10)),
@@ -104,8 +110,8 @@ class _InfoState extends State<Info> {
              RaisedButton(
                onPressed: ()=> _saveToken(tokenController.text),
                textColor: Colors.white,
-               color: checkPassed?Colors.green:Colors.redAccent,
-               child: Text(!checkPassed?"Login":"Verified"),
+               color: checkPassed==null?Colors.orangeAccent:checkPassed?Colors.green:Colors.redAccent,
+               child: Text(checkPassed==null?"Login":!checkPassed?"Invalid":"Verified"),
              ),
            ],
          ),

@@ -56,11 +56,11 @@ class _FanState extends State<Fan> {
           children: <Widget>[
             Container(
               decoration: BoxDecoration(
-                color: state==1?Colors.white:Colors.black,
-                border: Border.all(color: Colors.white),
+                color: state==1?Theme.of(context).unselectedWidgetColor:Theme.of(context).primaryColor,
+                border: Border.all(color: Theme.of(context).unselectedWidgetColor),
               ),
               padding: EdgeInsets.fromLTRB(30, 5, 30, 5),
-              child: Text("TOGGLE", style: TextStyle(fontSize: 25, color: state==1?Colors.black:Colors.white),),
+              child: Text("TOGGLE", style: TextStyle(fontSize: 25, color: state==1?Theme.of(context).primaryColor:Theme.of(context).unselectedWidgetColor),),
             ),
             Padding(padding: EdgeInsets.all(30),),
             Center(
