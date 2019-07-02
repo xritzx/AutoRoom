@@ -14,7 +14,10 @@ class _InfoState extends State<Info> {
   final database = FirebaseDatabase.instance.reference();
   String username="User";
   String token;
-  bool checkPassed = null;
+  Map<String,dynamic> checkPassed = {
+    'text' : 'Login',
+    'color' : Colors.orange,
+  };
   List<String> user;
 
   final usernameController = TextEditingController();
@@ -51,21 +54,42 @@ class _InfoState extends State<Info> {
      print(user.toString());
     });
     setUser(user).then((b){
-      database.child(globalUser.user[0]).child('token').update({'public':globalUser.user[1]}).then((_)=>_checkToken());
+      database.child(globalUser.user[0]).once().then((DataSnapshot data){
+        if(data.value!=null){
+          database.child(globalUser.user[0]).child('token').update({'public':globalUser.user[1]}).then((_)=>_checkToken());
+        }
+        else{
+         _checkToken(exists: false);
+        }
+      });
     });
 
   }
 
-  void _checkToken(){
+  void _checkToken({bool exists}){
+    if(exists==false){
+      setState((){
+        checkPassed = {
+           'text' : 'Invalid Username',
+           'color' : Colors.deepOrangeAccent,
+         };
+        });
+    }
     database.child(globalUser.user[0]).child('token').once().then((DataSnapshot snap){
       if(snap.value['public']==snap.value['private']){
         setState(() {
-         checkPassed = true;
+        checkPassed = {
+           'text' : 'Verified',
+           'color' : Colors.green,
+         };        
         });
       }
       else{
         setState(() {
-         checkPassed = false; 
+         checkPassed = {
+           'text' : 'Invalid Token',
+           'color' : Colors.red,
+         }; 
         });
       }
     });
@@ -110,8 +134,8 @@ class _InfoState extends State<Info> {
              RaisedButton(
                onPressed: ()=> _saveToken(tokenController.text),
                textColor: Colors.white,
-               color: checkPassed==null?Colors.orangeAccent:checkPassed?Colors.green:Colors.redAccent,
-               child: Text(checkPassed==null?"Login":!checkPassed?"Invalid":"Verified"),
+               color: checkPassed['color'],
+               child: Text(checkPassed['text']),
              ),
            ],
          ),

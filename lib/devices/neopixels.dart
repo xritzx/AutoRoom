@@ -64,7 +64,18 @@ class _NeoPixelsState extends State<NeoPixels> {
       'g': c.green,
       'b': c.blue,
     };
-    await database.child('neopixels').child(ledID=="-1"?'all':ledID).update(rgb);
+    await database.child('neopixels').child(ledID=="-1"?'all':int.parse(ledID).toString()).update(rgb);
+    if(ledID == '-1'){
+      var data;
+      await database.child('neopixels').once()
+            .then((DataSnapshot snapshot){
+              data = snapshot.value;
+              data.forEach((index, val){
+                data[index] = rgb;
+              });
+            });
+    await database.update({'neopixels':data});
+    }
     setState(() {
      updateState = true; 
     });
@@ -80,13 +91,13 @@ class _NeoPixelsState extends State<NeoPixels> {
            children: <Widget>[
                
             GestureDetector(
-              onTap: (){
+              onTap: () async{
                 //changes the ledID to -1 just to make the function work then switch back
                 String lastState = ledID;
                 setState(() {
                  ledID = "-1"; 
                 });
-                _updateColorDB();
+                await _updateColorDB();
                 setState(() {
                  ledID = lastState; 
                 });
