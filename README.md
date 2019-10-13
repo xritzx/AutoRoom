@@ -2,7 +2,7 @@
 
 A new Flutter project thats built to personalize and gain controll over your IoT projects in this case Home Automation
 -No third Party App or Service on Android or iOS
--Uses only http requests to retrieve data from remote server or firebase
+-Uses only data streams and http requests to send/retrieve data from remote server or firebase
 
 
 ## Getting Started
