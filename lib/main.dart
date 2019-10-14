@@ -1,30 +1,22 @@
 // Flutter imports
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 // Custom Utilities imports
 import 'package:Autoroom/appBar.dart';
 import 'package:Autoroom/theme.dart';
+import 'package:Autoroom/user.dart';
 // Devices to Control
 import 'package:Autoroom/devices/fan.dart';
 import 'package:Autoroom/devices/lights.dart';
 import 'package:Autoroom/devices/neopixels.dart';
 import 'package:Autoroom/devices/room_parameters.dart';
 import 'package:Autoroom/devices/info.dart';
-import 'package:Autoroom/user.dart';
 
 
 List<String> user;
 
-void main() async{
-
-  await getUser().then((List<String> _user){
-    user = _user;
-  });
-
+void main() {
   runApp(new AutoRoom());
 }
-
-
 
 class AutoRoom extends StatefulWidget {
   @override
@@ -37,6 +29,15 @@ class AutoRoomState extends State<AutoRoom> {
 
   int _selectedIndex = 0;
   bool themeMode = true;
+
+  @override
+  void initState() {
+
+    getUser().then((List<String> _user){
+      user = _user;
+    });
+    super.initState();
+  }
 
   void _shiftPage(DragEndDetails details){
     double v = details.velocity.pixelsPerSecond.dx;
@@ -73,7 +74,7 @@ class AutoRoomState extends State<AutoRoom> {
   @override
   Widget build(BuildContext context) {
     return  MaterialApp(
-        theme: themeMode?lightTheme():darkTheme(),
+        theme: themeMode? lightTheme(): darkTheme(),
         home: GestureDetector(
           onLongPress: ()=>setState(()=>themeMode=!themeMode),
           onHorizontalDragEnd: _shiftPage,
@@ -93,37 +94,35 @@ class AutoRoomState extends State<AutoRoom> {
               backgroundColor: Colors.transparent,
               type: BottomNavigationBarType.shifting,
 
-    
-
               items: [
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.home,color: Colors.deepPurple,),
-                  activeIcon: Icon(Icons.home,color: Colors.deepOrangeAccent,),
-                  title: Text('Home',style: TextStyle(color: Colors.deepOrangeAccent),),
+                  icon: Icon(Icons.home,color: Color.fromRGBO(228, 172, 14, 1),),
+                  activeIcon: Icon(Icons.home,color: Colors.pink[100],),
+                  title: Text('Home',style: TextStyle(color: Colors.pink[100]),),
                 ),
 
                 BottomNavigationBarItem(
                   icon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/fan.png', color: Color.fromARGB(255,150,150,150)))),
-                  activeIcon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/fan.png',color: Colors.deepOrangeAccent))),
-                  title: Text('Fan',style: TextStyle(color: Colors.deepOrangeAccent),),
+                  activeIcon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/fan.png',color: Colors.pink[100]))),
+                  title: Text('Fan',style: TextStyle(color: Colors.pink[100]),),
                 ),
 
                 BottomNavigationBarItem(
                   icon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/led.png',color: Color.fromARGB(255,150,150,150)))),
-                  activeIcon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/led.png',color: Colors.deepOrangeAccent))),
-                  title: Text('Lights',style: TextStyle(color: Colors.deepOrangeAccent),),
+                  activeIcon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/led.png',color: Colors.pink[100]))),
+                  title: Text('Lights',style: TextStyle(color: Colors.pink[100]),),
                 ),
 
                 BottomNavigationBarItem(
                   icon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/neopixels.png',color: Color.fromARGB(255,150,150,150)))),
-                  activeIcon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/neopixels.png',color: Colors.deepOrangeAccent))),
-                  title: Text('NeoPixels',style: TextStyle(color: Colors.deepOrangeAccent),),
+                  activeIcon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/neopixels.png',color: Colors.pink[100]))),
+                  title: Text('NeoPixels',style: TextStyle(color: Colors.pink[100]),),
                 ),
 
                 BottomNavigationBarItem(
                   icon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/thermometer.png',color: Color.fromARGB(255,150,150,150)))),
-                  activeIcon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/thermometer.png',color: Colors.deepOrangeAccent))),
-                  title: Text('Stats',style: TextStyle(color: Colors.deepOrangeAccent),),
+                  activeIcon: SizedBox( width:35, height:25, child: Tab(child:Image.asset('assets/images/thermometer.png',color: Colors.pink[100]))),
+                  title: Text('Stats', style: TextStyle(color: Colors.pink[100]),),
                 ),
 
               ],
