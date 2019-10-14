@@ -12,12 +12,14 @@ class Info extends StatefulWidget {
 class _InfoState extends State<Info> {
   
   final database = FirebaseDatabase.instance.reference();
-  String username="User";
+  String username = "User";
   String token;
-  Map<String,dynamic> checkPassed = {
+
+  Map<String, dynamic> checkPassed = {
     'text' : 'Login',
     'color' : Colors.orange,
   };
+
   List<String> user;
 
   final usernameController = TextEditingController();
@@ -76,7 +78,7 @@ class _InfoState extends State<Info> {
         });
     }
     database.child(globalUser.user[0]).child('token').once().then((DataSnapshot snap){
-      if(snap.value['public']==snap.value['private']){
+      if(snap.value['public'] == snap.value['private']){
         setState(() {
         checkPassed = {
            'text' : 'Verified',

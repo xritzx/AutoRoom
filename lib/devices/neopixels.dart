@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:Autoroom/theme.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:Autoroom/main.dart';
-
+import 'dart:math';
 
 class NeoPixels extends StatefulWidget {
   NeoPixels({Key key}) : super(key: key);
@@ -20,6 +20,7 @@ class _NeoPixelsState extends State<NeoPixels> {
   double valueGlobal = 0;
   String ledID = "0";
   bool updateState = false;
+  final _random_tinge = new Random();
 
   @override
   void initState() {
@@ -59,10 +60,11 @@ class _NeoPixelsState extends State<NeoPixels> {
 
   Future<void> _updateColorDB() async{
     Color c = HSVColor.fromAHSV(1, hueGlobal, saturationGlobal, valueGlobal).toColor();
+    int tinge = -1+_random_tinge.nextInt(2);
     Map<String, dynamic> rgb = {
-      'r': c.red,
-      'g': c.green,
-      'b': c.blue,
+      'r': c.red + (c.red==0?0:tinge),
+      'g': c.green + (c.green==0?0:tinge),
+      'b': c.blue + (c.blue==0?0:tinge),
     };
     await database.child('neopixels').child(ledID=="-1"?'all':int.parse(ledID).toString()).update(rgb);
     if(ledID == '-1'){
