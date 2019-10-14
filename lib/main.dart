@@ -74,6 +74,7 @@ class AutoRoomState extends State<AutoRoom> {
   @override
   Widget build(BuildContext context) {
     return  MaterialApp(
+        debugShowCheckedModeBanner: false,
         theme: themeMode? lightTheme(): darkTheme(),
         home: GestureDetector(
           onLongPress: ()=>setState(()=>themeMode=!themeMode),
