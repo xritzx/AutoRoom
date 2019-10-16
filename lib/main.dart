@@ -84,7 +84,9 @@ class AutoRoomState extends State<AutoRoom> {
             appBar: CustomAppBar(_titles[_selectedIndex]),
             body: _children[_selectedIndex],
 
-            bottomNavigationBar: BottomNavigationBar(
+            bottomNavigationBar: Theme(
+              data: themeMode? lightTheme() : darkTheme(),
+              child: BottomNavigationBar(
               currentIndex: _selectedIndex,
 
               onTap: (index){
@@ -128,6 +130,7 @@ class AutoRoomState extends State<AutoRoom> {
                 ),
 
               ],
+            ),
           ), 
         ),  
       ),
