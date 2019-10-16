@@ -5,7 +5,6 @@ import 'package:Autoroom/main.dart' as globalUser;
 
 class Info extends StatefulWidget {
   Info({Key key}) : super(key: key);
-
   _InfoState createState() => _InfoState();
 }
 
@@ -36,6 +35,7 @@ class _InfoState extends State<Info> {
     });
     _checkToken();
   }
+
   @override
   void dispose() {
     super.dispose();
@@ -55,9 +55,9 @@ class _InfoState extends State<Info> {
      globalUser.user = user;
      print(user.toString());
     });
-    setUser(user).then((b){
+    setUser(user).then((int b){
       database.child(globalUser.user[0]).once().then((DataSnapshot data){
-        if(data.value!=null){
+        if(data.value != null){
           database.child(globalUser.user[0]).child('token').update({'public':globalUser.user[1]}).then((_)=>_checkToken());
         }
         else{
@@ -65,7 +65,6 @@ class _InfoState extends State<Info> {
         }
       });
     });
-
   }
 
   void _checkToken({bool exists}){

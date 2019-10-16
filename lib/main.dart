@@ -12,10 +12,14 @@ import 'package:Autoroom/devices/room_parameters.dart';
 import 'package:Autoroom/devices/info.dart';
 
 
-List<String> user;
+var user;
 
 void main() {
-  runApp(new AutoRoom());
+  WidgetsFlutterBinding.ensureInitialized();
+  getUser().then((_user){
+    user = _user;
+    runApp(new AutoRoom());
+  });
 }
 
 class AutoRoom extends StatefulWidget {
@@ -32,10 +36,7 @@ class AutoRoomState extends State<AutoRoom> {
 
   @override
   void initState() {
-
-    getUser().then((List<String> _user){
-      user = _user;
-    });
+  
     super.initState();
   }
 
