@@ -1,9 +1,12 @@
 # Autoroom
 
-A new Flutter project thats built to personalize and gain controll over your IoT projects in this case Home Automation
-- No third Party App or Service on Android or iOS
+A new Flutter project thats built to personalize and gain control over your IoT projects in this case Home Automation.
+(Know more about Home Automation [here](https://www.techopedia.com/definition/29999/home-automation-system)
+- No third Party App or Service on Android or iOS.
 - Uses only data streams and http requests to send/retrieve data from remote server or firebase.
 - This app mainly controls a fan, lights with variable intensity and a chain of neopixels.
+
+
 
 
 ## Getting Started
