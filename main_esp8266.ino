@@ -7,8 +7,7 @@
 #define FIREBASE_HOST "xxxxxxxxxxxxx"
 #define WIFI_SSID "xxxxxxxxxxxxxx"
 #define WIFI_PASSWORD "xxxxxxxxxxxxxx"
-#define FIREBASE_AUTH "xxxxxxxxxxxxxx"
-#define USER_NAME "xritzx"
+#define FIREBASE_AUTH "xxxxxxxxxxxxxx" //Database Secret 
 
 #define FAIL_INDICATOR 16
 #define FAN_PIN 4
@@ -26,6 +25,7 @@ DHT dht(DHT_PIN, DHTTYPE);
 // Global Variables for temperature and humidity
 int humidity;
 int temp;
+String user = "xritzx";
 
 void setup() {
 
@@ -44,13 +44,14 @@ void setup() {
   
   //Connect to the WiFi 
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  Serial.print("Connecting ");
+  Serial.print("Connecting to your WiFi SSID ");
+  Serial.println(WIFI_SSID);
   delay(1000);
 
   // Blocking Connection
   while (WiFi.status() != WL_CONNECTED) {
     Serial.print(".");
-    delay(500);
+    delay(600);
   }
 
   // Connection established
@@ -59,7 +60,7 @@ void setup() {
 
   // Establish the connection with Firebase
   Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
-  Firebase.stream("/xritzx");
+  Firebase.stream(user);
   Serial.println("Firebase Connection Failed !");
   Serial.println(Firebase.failed());
   Serial.println(Firebase.error());
@@ -137,7 +138,7 @@ void readTnH(){
     String json = "{\"temp\":"+String(temp)+",\"humidity\":"+String(humidity)+"}";
     StaticJsonBuffer<100> jsonBuffer;
     JsonVariant params = jsonBuffer.parse(json);
-    Firebase.set("/xritzx/params", params);
+    Firebase.set("/"+user+"/params", params);
     params.printTo(Serial);  
                                                                                                                                                                               
     TIME = millis();
@@ -164,7 +165,7 @@ void loop(){
     JsonObject& object = jsonVariant.as<JsonObject>();
     object.printTo(Serial);
 
-    if(path.indexOf('neopixels')>0){
+    if(path.indexOf("neopixels")>0){
       int index = getNeopixelIndex(path);
       updateNeopixel(index, object);
     }
